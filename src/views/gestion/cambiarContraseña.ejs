@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+  <%- include('../partials/header'); %>
+  <main class="flex-grow-1 d-flex align-items-center justify-content-center">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow rounded-4 p-4">
+          <h3 class="text-center text-primary mb-4">
+            <i class="bi bi-key-fill me-2"></i>Cambiar Contraseña
+          </h3>
+  
+          <form id="cambioForm">
+            <div class="mb-3">
+              <input type="hidden" name="id" value="<%= id %>">
+              <label for="password" class="form-label">Nueva Contraseña</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                class="form-control"
+                placeholder="Ingrese nueva contraseña"
+                required
+              />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-outline-dark mt-4 text-uppercase">
+                <i class="bi bi-check-circle me-1"></i>Actualizar Contraseña
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </main>
+  
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- script cambio contraseña -->
+<script>
+  document.getElementById("cambioForm").addEventListener('submit', async (e) => {
+      e.preventDefault(); 
+
+      const id = document.querySelector('input[name="id"]').value;
+      const password = document.querySelector('input[name="password"]').value;
+
+      try {
+        const response = await fetch(`/usuarios/actualizarContra/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ password })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('Contraseña actualizada correctamente');
+          window.location.reload(); 
+        } else {
+          alert('Error al actualizar la contraseña');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Hubo un problema al enviar la solicitud');
+      }
+    });
+</script>
+<%- include('../partials/scripts'); %>
+
+<footer>
+  <%- include('../partials/footer') %>
+</footer>
+
+</html>

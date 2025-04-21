@@ -1,0 +1,58 @@
+<header class="bg-dark text-white">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark"style="background-color: #595959;">
+      <div class="container-fluid">
+        <!-- Logo o nombre de la app -->
+        <a class="navbar-brand" href="/home">
+            <img src="/img/logoSIT.png" alt="logo" class="img-fluid" style="width: 170px; height: auto;">
+        </a>
+  
+        <!-- Toggle de menú para dispositivos móviles -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <!-- Barra de navegación -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <!-- Home -->
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/home">Home</a>
+            </li>
+  
+            <!-- Menú Usuario -->
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsuario" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Usuario
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownUsuario">
+                <% if (role === "admin") { %>
+                <li><a class="dropdown-item" href="/usuarios/crearUsuario">Crear usuario</a></li>
+                <% } %>
+                <% if (role === "jefatura" || role === "admin") { %>
+                <li><a class="dropdown-item" href="/usuarios/listar">Listar usuarios</a></li>
+                <% } %>
+                <li><a class="dropdown-item" href="/usuarios/actualizarContra">Cambiar contraseña</a></li>
+                
+              </ul>
+            </li>
+            
+            <!-- Menú Asistencia -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAsistencia" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Asistencia
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownAsistencia">
+                <li><a class="dropdown-item" href="/asistencia/crear">Crear asistencia</a></li>
+                <li><a class="dropdown-item" href="/asistencia/listar">Mis asistencias</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/logout">Cerrar Sesion</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+ 

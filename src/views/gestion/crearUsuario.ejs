@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <%- include ('../partials/head'); %>
+  <title>Crear Usuario</title>
+  <style>
+    .form-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .form-header {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #0d6efd;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    .btn-custom {
+      background-color: #0d6efd;
+      color: #fff;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-custom:hover {
+      background-color: #0b5ed7;
+    }
+
+    .footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+  </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+  <%- include ('../partials/header'); %>
+
+  <main class="flex-grow-1 d-flex align-items-center justify-content-center">
+  <div class="container py-5">
+    <div class="form-container">
+      <h2 class="form-header">👤 Crear Nuevo Usuario</h2>
+
+      <form action="/usuarios/crear" method="POST">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa el nombre del usuario" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="apellido" class="form-label">Apellido</label>
+          <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingresa el apellido del usuario" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo Electrónico</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="ejemplo@dominio.com" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa la contraseña" required>
+        </div>
+
+        <div class="mb-4">
+          <label for="rol" class="form-label">Rol</label>
+          <select class="form-select" id="rol" name="rol" required>
+            <option value="" disabled selected>Seleccionar rol</option>
+            <option value="admin">Administrador</option>
+            <option value="jefatura">Jefatura</option>
+            <option value="usuario">Usuario</option>
+          </select>
+        </div>
+
+        <!-- Botón Crear Usuario -->
+        <button type="submit" class="btn btn-primary w-100 d-flex justify-content-center align-items-center gap-2">
+          <i class="bi bi-person-plus-fill"></i>
+          Crear Usuario
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+</main>
+  <footer >
+    <%- include('../partials/footer') %>
+    <%- include('../partials/scripts') %>
+  </footer>
+
+  <!-- Bootstrap Icons (si aún no los tienes en el head) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  
+
+</body>
+</html>

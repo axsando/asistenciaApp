@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <%- include('../partials/head') %>
+  <title>Listado de Asistencias</title>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+  <%- include('../partials/header') %>
+  <main class="flex-grow-1 d-flex align-items-center justify-content-center text-center text-white">
+  <div class="container py-5">
+    <div class="card shadow-lg rounded-4">
+      <div class="card-body">
+        <h2 class="text-center text-primary mb-4">
+          🗓️ Listado de Asistencias
+        </h2>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered align-middle">
+            <thead class="table-primary text-center">
+              <tr>
+                <th scope="col">Asistencias</th>
+                <th scope="col">Ausencias</th>
+                <th scope="col">Dias Habiles del Mes</th>
+              </tr>
+            </thead>
+            <tbody>
+                  <tr>
+                    <td><%= conteo.asistencias %></td>
+                    <td><%= conteo.ausencias %></td>
+                    <td><%= conteo.diasHabiles %></td>
+                  </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered align-middle">
+            <thead class="table-primary text-center">
+              <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (asistencia.length === 0) { %>
+                <tr>
+                  <td colspan="2" class="text-center text-muted">No hay asistencias registradas.</td>
+                </tr>
+              <% } else { %>
+                <% asistencia.forEach(asistencia => { %>
+                  <tr>
+                    <td><%= new Date(asistencia.fecha).toLocaleString("es-CL") %></td>
+                    <td><%= asistencia.tipo.replace('_', ' ').toUpperCase() %></td>
+                  </tr>
+                <% }) %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </main>
+
+  <footer>
+    <%- include('../partials/scripts') %>
+    <%- include('../partials/footer') %>
+  </footer>
+
+  <!-- Bootstrap Icons (si aún no los has incluido en head) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+  <%- include('../partials/header'); %>
+
+  <main class="flex-grow-1 d-flex align-items-center justify-content-center text-center text-white">
+  <div class="table-responsive">
+  <div class="container py-5">
+    <div class="card shadow rounded-4">
+      <div class="card-body p-4">
+        <h2 class="text-center mb-4 text-primary">👥 Lista de Usuarios</h2>
+        <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-primary text-center">
+            <tr>
+              <th>Nombre</th>
+              <th>Correo Electrónico</th>
+              <% if (role === "admin") { %>
+              <th>Rol</th>
+              <% } %>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% usuarios.forEach(usuario => { %>
+              <tr>
+                <td><%= usuario.nombre %> <%= usuario.apellido %></td>
+                <td><%= usuario.email %></td>
+                <% if (role === "admin") { %>
+                <td><span class="badge bg-secondary text-uppercase"><%= usuario.rol %></span></td>
+                <% } %>
+                <td class="text-center">
+                  <% if (role === "admin") { %>
+                    <button type="button" class="btn btn-outline-warning btn-sm btn-toggle-form-password mb-1" data-id="<%= usuario.id %>">
+                      <i class="bi bi-key-fill"></i> Cambiar Contraseña
+                    </button>
+                    <button type="button" class="btn btn-outline-dark btn-sm btn-toggle-form-rol mb-1" data-id="<%= usuario.id %>">
+                      <i class="bi bi-key-fill"></i> Cambiar Rol
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm btn-eliminar mb-1" data-id="<%= usuario.id %>">
+                      <i class="bi bi-trash3-fill"></i> Eliminar
+                    </button>
+                    <button type="button" class="btn btn-outline-success btn-sm btn-toggle-form-asistencia mb-1" data-id="<%= usuario.id %>">
+                      <i class="bi bi-key-fill"></i> Crear Asistencia 
+                    </button>
+                  <% } %>
+                  <a class="btn btn-outline-info btn-sm" href="/usuarios/listarFechaUsuario/<%= usuario.id %>">
+                    <i class="bi bi-calendar-check"></i> Ver Asistencias
+                  </a>
+                </td>
+              </tr>
+  
+              <!-- Fila de formulario de cambio de contraseña -->
+              <tr class="password-form-row bg-light" id="form-row-<%= usuario.id %>" style="display: none;">
+                <td colspan="4">
+                  <form method="POST" action="/usuarios/actualizarContra/<%= usuario.id %>" class="d-flex gap-2">
+                    <input type="password" name="password" placeholder="Nueva contraseña" class="form-control" required />
+                    <button type="submit" class="btn btn-success btn-sm">
+                      <i class="bi bi-check2-circle"></i> Actualizar
+                    </button>
+                  </form>
+                </td>
+              </tr>
+
+              <!-- Fila de cambio de rol -->
+              <tr class="rol-form-row bg-light" id="rol-form-row-<%= usuario.id %>" style="display: none;">
+                <td colspan="4">
+                  <form method="POST" action="/usuarios/actualizarRol/<%= usuario.id %>" class="d-flex gap-2">
+                    <div class="mb-4">
+                      <label for="rol" class="form-label">Rol</label>
+                      <select class="form-select" id="rol" name="rol" required>
+                        <option value="" disabled selected>Seleccionar rol</option>
+                        <option value="admin">Administrador</option>
+                        <option value="jefatura">Jefatura</option>
+                        <option value="usuario">Usuario</option>
+                      </select>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+                      <button type="submit" class="btn btn-success px-4 py-2">
+                        <i class="bi bi-check2-circle me-1"></i> Actualizar
+                      </button>
+                    </div>                                                     
+                  </form>
+                </td>
+              </tr>
+
+              <!-- Fila de formulario de agregar asistencia (perdonazo) -->
+              <tr class="asistencia-form-row bg-light" id="asistencia-form-row-<%= usuario.id %>" style="display: none;">
+                <td colspan="4">
+                  <form method="POST" action="/usuarios/crearDiaAusente/<%= usuario.id %>" class="d-flex gap-2">
+                    <div class="mb-4">
+                      <label for="tipo" class="form-label">Tipo</label>
+                      <select class="form-select" id="tipo" name="tipo" required>
+                        <option value="" disabled selected>Seleccionar tipo</option>
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                        <option value="entrada_colacion">Entrada a Colacion</option>
+                        <option value="salida_colacion">Salida a Colacion</option>
+                      </select>
+                    </div>
+                    <div class="mb-4">
+                      <label for="fecha" class="form-label">Fecha</label>
+                      <input type="date" name="fecha" placeholder="10-05-2025" class="form-control" required />
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+                      <button type="submit" class="btn btn-success px-4 py-2">
+                        <i class="bi bi-check2-circle me-1"></i> Crear
+                      </button>
+                    </div>                                                     
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>    
+</body>
+
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- script cambio contraseña -->
+<script>
+  document.querySelectorAll('.password-form-row form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); 
+
+      const id = form.getAttribute('action').split('/').pop(); 
+      const passwordInput = form.querySelector('input[name="password"]');
+      const password = passwordInput.value;
+
+      try {
+        const response = await fetch(`/usuarios/actualizarContra/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ password })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('Contraseña actualizada correctamente');
+          window.location.reload(); 
+        } else {
+          alert('Error al actualizar la contraseña');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Hubo un problema al enviar la solicitud');
+      }
+    });
+  });
+</script>
+
+<script>
+  document.querySelectorAll('.btn-toggle-form-password').forEach(button => {
+  button.addEventListener('click', () => {
+    const id = button.getAttribute('data-id');
+    const formRow = document.getElementById(`form-row-${id}`);
+    formRow.style.display = formRow.style.display === 'none' ? 'table-row' : 'none';
+  });
+});
+</script>
+
+<!-- script cambio rol -->
+
+<script>
+  document.querySelectorAll('.rol-form-row form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); 
+
+      const id = form.getAttribute('action').split('/').pop(); 
+      const rolInput = form.querySelector('select[name="rol"]');
+      const rol = rolInput.value;
+
+      try {
+        const response = await fetch(`/usuarios/actualizarRol/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ rol })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('Rol actualizado correctamente');
+          window.location.reload(); 
+        } else {
+          alert('Error al actualizar el rol');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Hubo un problema al enviar la solicitud');
+      }
+    });
+  });
+</script>
+<div class="table-responsive">
+<script>
+  document.querySelectorAll('.btn-toggle-form-rol').forEach(button => {
+  button.addEventListener('click', () => {
+    const id = button.getAttribute('data-id');
+    const formRow = document.getElementById(`rol-form-row-${id}`);
+    formRow.style.display = formRow.style.display === 'none' ? 'table-row' : 'none';
+  });
+});
+</script>
+
+<!-- script crear asistencia(perdonazo) -->
+
+<script>
+  document.querySelectorAll('.asistencia-form-row form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); 
+
+      const id = form.getAttribute('action').split('/').pop(); 
+      const tipoInput = form.querySelector('select[name="tipo"]');
+      const tipo = tipoInput.value;
+      const fechaInput = form.querySelector('input[name="fecha"]');
+      const fecha = fechaInput.value;
+
+      try {
+        const response = await fetch(`/asistencia/crearDiaAusente/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ tipo, fecha })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('Asistencia creada correctamente');
+          window.location.reload(); 
+        } else {
+          alert('Error al crear la asistencia');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Hubo un problema al enviar la solicitud');
+      }
+    });
+  });
+</script>
+<div class="table-responsive">
+<script>
+  document.querySelectorAll('.btn-toggle-form-asistencia').forEach(button => {
+  button.addEventListener('click', () => {
+    const id = button.getAttribute('data-id');
+    const formRow = document.getElementById(`asistencia-form-row-${id}`);
+    formRow.style.display = formRow.style.display === 'none' ? 'table-row' : 'none';
+  });
+});
+</script>
+ 
+
+<script>
+  document.querySelectorAll('.btn-eliminar').forEach(button => {
+    button.addEventListener('click', async () => {
+      const id = button.getAttribute('data-id');
+      console.log(id)
+      const confirmar = confirm(`¿SEGURO que deseas eliminar el usuario con ID ${id}?`);
+      if (!confirmar) return;
+
+      try {
+        const response = await fetch(`/usuarios/eliminar/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          button.closest('tr').remove();
+          window.location.reload();
+        } else {
+          alert("Error al eliminar el usuario.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error en la solicitud.");
+      }
+    })
+  })
+</script>
+</div>   
+</div> 
+</div>
+<footer>
+  <%- include('../partials/scripts'); %>
+  <%- include('../partials/footer') %>
+</footer>
+
+</html>
