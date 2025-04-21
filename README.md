@@ -20,6 +20,7 @@ Sistema web para la gestión de asistencias de usuarios. Permite registrar usuar
 git clone https://github.com/tu-usuario/sistema-asistencias.git
 cd sistema-asistencias
 npm install
+npm run start
 ```
 
 ## ⚙️ Configuracion

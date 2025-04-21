@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node --env-file=./.env --watch index.js",
+    "start": "node --env-file=./.env index.js",
     "build:css": "./node_modules/.bin/tailwindcss -i ./src/css/styles.css -o ./public/css/styles.css --watch"
   },
   "type": "module",
