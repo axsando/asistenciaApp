@@ -6,7 +6,7 @@ import verifyUser from "../middlewares/verifyUser.js";
 
 const router = Router();
 
-router.get('/crearUsuario', verifyToken, checkRole("admin"), (req, res) => {
+router.get('/crear', verifyToken, checkRole("admin"), (req, res) => {
     res.render('gestion/crearUsuario', {title: 'Crear Usuario', role: req.usuario.rol})
 })
 

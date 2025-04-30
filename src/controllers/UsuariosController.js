@@ -6,7 +6,7 @@ class UsuariosController {
         try {
             const usuario = req.body;
             await UsuariosService.crearUsuario(usuario);
-            res.redirect('/usuarios/crearUsuario')
+            res.status(201).json({ success: true, message: 'Usuario creado correctamente.' });
         } catch (error) {
             res.status(500).json({ error: 'Error al crear el usuario: ' + error.message });
         }
