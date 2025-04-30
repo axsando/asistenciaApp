@@ -29,7 +29,12 @@ npm run start
 
 -Renombra el archivo .env.example a .env.
 
--Configura las variables de entorno en el archivo .env:
+-Configura las variables de entorno en el archivo .env
+
+-Ingresa por primera vez con este usuario creado por defecto:
+
+admin@ejemplo.com
+admin123
 
 ## 📑 Tabla de Contenido
 
