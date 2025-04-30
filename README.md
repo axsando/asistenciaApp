@@ -34,6 +34,7 @@ npm run start
 -Ingresa por primera vez con este usuario creado por defecto:
 
 -correo: admin@ejemplo.com
+
 -contraseña: admin123
 
 ## 📑 Tabla de Contenido
