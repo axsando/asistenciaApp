@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
   {
     host: dbConfig.host,
     port: dbConfig.port,
-    dialect: "postgres",
+    dialect: dbConfig.dialect,
     logging: false,
   }
 );
